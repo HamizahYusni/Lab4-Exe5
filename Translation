@@ -1,0 +1,84 @@
+import java.util.ArrayList;
+
+public class Translation {
+
+	private String translate;
+	
+	public Translation(String translate) {
+		this.translate=translate;
+	}
+	
+	public Translation() {
+	
+	}
+	
+public void setText(String translate) {
+		
+		this.translate=translate;
+		
+	}
+	
+	public String getTranslate() {
+		
+		return translate;
+		
+	}
+		
+	
+	public String getTranslatedMessage() {
+		
+		String translatedMessage = "";
+				
+		if(translate.contentEquals("Good Morning")||translate.contentEquals("1")) {
+			
+		
+				translatedMessage = "Selamat Pagi      الخير صباح          좋은 아침";
+	
+			}
+			
+			
+		else if (translate.contentEquals("Good Night")||translate.contentEquals("2")) {
+			
+		
+				translatedMessage = "Selamat malam     مساؤك طاب        안녕히 주무세요";
+				
+						
+			}
+			
+		else if (translate.contentEquals("How are you?")||translate.contentEquals("3")) {
+			
+			
+				translatedMessage = "Apa khabar?       حالك؟ كيف        어떻게 지내세요?";
+				
+		
+			}
+		
+	    else if (translate.contentEquals("Thank you")||translate.contentEquals("4")) {
+		
+				translatedMessage = "Terima kasih        شكرالك          감사합니다";
+		
+			}
+		
+		else if (translate.contentEquals("Goodbye")||translate.contentEquals("5")) {
+			
+		
+				translatedMessage = "Selamat Tinggal    السلامة مع          안녕";
+				
+		
+			}
+			
+		else if (translate.contentEquals("What's up?")||translate.contentEquals("6")) {
+			
+			
+				translatedMessage = "Ada apa?          أخبارك؟ ما            뭐야?                    ";
+						
+			}
+		 
+		else
+			translatedMessage = "Write your choice properly!";
+		
+		return translatedMessage;
+	
+	  }
+
+}
