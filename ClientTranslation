@@ -1,73 +1,69 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Scanner;
 
-	public class ServerTranslation {
 
+public class ClientTranslation {
+
+	public static void main(String[] args) {
+					
+		try {
+			
+			// Connect to the server @ localhost, port 1808
+			Socket socket = new Socket(InetAddress.getLocalHost(), 1808);
+			
+			// Create Scanner object to accept data from user
+			Scanner obj = new Scanner(System.in);
+			
+			// Create stream to write data on the network
+			DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+			
+			System.out.println("************************************************");
+			System.out.println("               Client Translation               ");
+			System.out.println("************************************************");
+			System.out.println(" ");
+			
+			// Get choice from client
+			System.out.println("Choice of words to translate:");
+			System.out.println("1. Good Morning");
+			System.out.println("2. Good Night");
+			System.out.println("3. How are you?");
+			System.out.println("4. Thank you");
+			System.out.println("5. Goodbye");
+			System.out.println("6. What's up?");
+			System.out.print("Please enter your choice: ");
+			String text = obj.nextLine();
+			
+			// Send current choice to server
+			outputStream.writeUTF(text);
+			outputStream.flush();
 		
-		public static void main(String[] args) throws Exception {
+			// Create stream to read data on the network
+			DataInputStream inputStream = new DataInputStream(socket.getInputStream());
 			
+			// Read object for translation
+			String translatedText = inputStream.readUTF();
+		
+			System.out.println("\nTranslated to: " );
+			System.out.println("\n Malay            Arabic          Korean");
 			
-			ServerSocket serverSocket = null;
+			// Display result of translated text from server
+			System.out.println(translatedText);
+ 			
+			// Close everything
+			outputStream.close();
+			obj.close();
+			socket.close();
+			inputStream.close();
 			
-			try {
-					    
-				
-				// Binding to a port or any other port no you are fancy of
-				int portNo = 1808;
-				serverSocket = new ServerSocket(portNo);
-				
-				System.out.println("**********************************************");
-				System.out.println("              Server Translation              ");
-				System.out.println("                 ...Running...                ");
-				System.out.println("          ...Waiting for connection...        ");
-				System.out.println("**********************************************");
-				
-				// Server needs to be alive forever
-				while(true) {
-					
-					// Accept client request for connection
-					Socket socket = serverSocket.accept();
-					
-					// Create stream to read data from client
-					DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-					
-					// Create object for translation
-					Translation message = new Translation();
-					 message.setText(inputStream.readUTF()); 
-					 
-					 // Create object to store choice
-					 String choice = message.getTranslate();
-					 
-					 // Create object to translate choice enter by user
-					Translation textToTranslate = new Translation(choice);
-					
-					// Create stream to write data on the network
-					DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-					
-					// Send current translation back to the client
-					outputStream.writeUTF(textToTranslate.getTranslatedMessage());
-					outputStream.flush();
-									
-					// Close all object
-					socket.close();
-					inputStream.close();
-					outputStream.close();
-				
-				}
-				
-				
-			}catch(IOException ioe) {
-				
-				if(serverSocket != null)
-					serverSocket.close();
-				
-				ioe.printStackTrace();
-				
-			}
-
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
+
+}
