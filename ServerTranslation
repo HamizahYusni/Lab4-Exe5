@@ -1,0 +1,73 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+	public class ServerTranslation {
+
+		
+		public static void main(String[] args) throws Exception {
+			
+			
+			ServerSocket serverSocket = null;
+			
+			try {
+					    
+				
+				// Binding to a port or any other port no you are fancy of
+				int portNo = 1808;
+				serverSocket = new ServerSocket(portNo);
+				
+				System.out.println("**********************************************");
+				System.out.println("              Server Translation              ");
+				System.out.println("                 ...Running...                ");
+				System.out.println("          ...Waiting for connection...        ");
+				System.out.println("**********************************************");
+				
+				// Server needs to be alive forever
+				while(true) {
+					
+					// Accept client request for connection
+					Socket socket = serverSocket.accept();
+					
+					// Create stream to read data from client
+					DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+					
+					// Create object for translation
+					Translation message = new Translation();
+					 message.setText(inputStream.readUTF()); 
+					 
+					 // Create object to store choice
+					 String choice = message.getTranslate();
+					 
+					 // Create object to translate choice enter by user
+					Translation textToTranslate = new Translation(choice);
+					
+					// Create stream to write data on the network
+					DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+					
+					// Send current translation back to the client
+					outputStream.writeUTF(textToTranslate.getTranslatedMessage());
+					outputStream.flush();
+									
+					// Close all object
+					socket.close();
+					inputStream.close();
+					outputStream.close();
+				
+				}
+				
+				
+			}catch(IOException ioe) {
+				
+				if(serverSocket != null)
+					serverSocket.close();
+				
+				ioe.printStackTrace();
+				
+			}
+
+		}
+
+	}
